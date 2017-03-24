@@ -1,0 +1,9 @@
+fig1=imread('AB&64&3&24min.jpg');
+fig2=imread('AB&64&1&9min.jpg');
+fig3=imread('AB&16&1&23min.jpg');
+fig4=imread('AB&8&1&68min.jpg');
+fig=imread('lena.bmp');
+p1=psnr(fig1, fig);
+p2=psnr(fig2, fig);
+p3=psnr(fig3, fig);
+p4=psnr(fig4, fig);
