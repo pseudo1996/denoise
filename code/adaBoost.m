@@ -1,11 +1,11 @@
 function denoImage=adaBoost(tempImage)
 %说明：改进的WNNM算法(Adaboost)
 
-    global image rs cs prs pcs patchNum patchLen nnmConst adaConst eps noiseVar
+    global image rs cs prs pcs rstep cstep patchNum patchLen nnmConst adaConst eps noiseVar
     denoImage=zeros(rs, cs);   %用于point-wise的估计
     numbers=zeros(rs, cs);  %用于计算每个像素被访问了多少次
-    for xpos=1:prs:rs-prs+1 
-        for ypos=1:pcs:cs-pcs+1
+    for xpos=1:rstep:rs-prs+1 
+        for ypos=1:cstep:cs-pcs+1
             [patches, dist]=blockMatch(tempImage, xpos, ypos);  %块匹配
             
             %解决WNNM问题
