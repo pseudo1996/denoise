@@ -1,0 +1,9 @@
+﻿  AdaBoost.cpp
+AdaBoost.cpp(43): warning C4267: “初始化”: 从“size_t”转换到“int”，可能丢失数据
+  main.cpp
+  正在生成代码
+  11 of 217 functions ( 5.1%) were compiled, the rest were copied from previous compilation.
+    8 functions were new in current compilation
+    2 functions had inline decision re-evaluated but remain unchanged
+  已完成代码的生成
+  image_denoise.vcxproj -> E:\Design\denoise\image_denoise\x64\Release\image_denoise.exe
