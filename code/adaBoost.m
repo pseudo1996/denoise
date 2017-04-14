@@ -1,9 +1,10 @@
 function denoImage=adaBoost(tempImage)
-%说明：改进的WNNM算法(Adaboost)
-
+%改进的WNNM算法(Adaboost)
+%根据论文“Adaptive Boosting for Image Denoising Beyond Low-Rank Representation
+%and Sparse Coding”， Bo Wang, Tao Lu and Zixiang Xiong
     global image rs cs prs pcs rstep cstep patchNum patchLen nnmConst adaConst eps noiseVar
     denoImage=zeros(rs, cs);   %用于point-wise的估计
-    numbers=zeros(rs, cs);  %用于计算每个像素被访问了多少次
+    numbers=zeros(rs, cs);  %计算每个像素被访问了多少次，便于平均
     for xpos=1:rstep:rs-prs+1 
         for ypos=1:cstep:cs-pcs+1
             [patches, dist]=blockMatch(tempImage, xpos, ypos);  %块匹配
@@ -14,19 +15,15 @@ function denoImage=adaBoost(tempImage)
             sigmaEst=sqrt(max(sigma.*sigma-patchNum*noiseVar, 0));  %估计干净patches的奇异值向量
             weight=nnmConst*sqrt(patchNum)./(sigmaEst+eps);
             SwDiag=max(sigma-weight, 0);
-            Sw=zeros(patchLen, patchNum);
-            len=length(SwDiag);
-            for i=1:len
-                Sw(i,i)=SwDiag(i);
-            end
+            Sw=[diag(SwDiag);zeros(patchLen-patchNum, patchNum)];
             Xest=U*Sw*V';
+            clear patches
             
             %计算聚合的权值
             h=10;%使用exp(-d^2/h)计算权值,h是调节参数
             funcValues=exp(-(dist.*dist)/h);
             aggWeight=funcValues/sum(funcValues);
-            aggWeights=repmat(aggWeight', patchLen, 1);
-            denoPatch=sum(Xest.*aggWeights, 2);  %聚合(加权平均)
+            denoPatch=Xest*aggWeight; %此处是矩阵运算的结果，可验证
             
             %计算AdaBoost自适应的反馈系数
             primPatch=reshape(image(xpos:xpos+prs-1, ypos:ypos+pcs-1), patchLen, 1);    %列向量
